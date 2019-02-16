@@ -32,26 +32,44 @@ namespace TicTacToe
                 }
             }
 
+            //printing board to show the final outcome
+            printBoard(ref board);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+
             //game results
             if (gameState == xWin)
                 Console.WriteLine("Player X wins!");
             else if (gameState == oWin)
                 Console.WriteLine("Player O wins!");
             else
+            {
+                Console.ResetColor();
                 Console.WriteLine("The game is a draw!");
+            }
+
+            Console.ResetColor();
         }
 
 
         public static void gameMove(int player, ref int[] board)
         {
             int position;
+            bool success;
+
             Console.Write("Player" + printChar(player) + "selection: ");
-            position = Int32.Parse(Console.ReadLine());
+            success = Int32.TryParse(Console.ReadLine(), out position);
+
+            while(!success)
+            {
+                printInvalidPosition();
+                success = Int32.TryParse(Console.ReadLine(), out position);
+            }
 
             //validating position
             while (position > 9 || position < 1 || board[position - 1] != 0)
             {
-                Console.Write("Invalid position. Select an available position(1-9): ");
+                printInvalidPosition();
                 position = Int32.Parse(Console.ReadLine());
             }
 
@@ -98,7 +116,7 @@ namespace TicTacToe
             Console.WriteLine("-----------          -----------");
             Console.WriteLine(printChar(board[3]) + "|" + printChar(board[4]) + "|" + printChar(board[5]) + "            4 | 5 | 6 ");
             Console.WriteLine("-----------          -----------");
-            Console.WriteLine(printChar(board[6]) + "|" + printChar(board[7]) + "|" + printChar(board[8]) + "            7 | 8 | 9 ");
+            Console.WriteLine(printChar(board[6]) + "|" + printChar(board[7]) + "|" + printChar(board[8]) + "            7 | 8 | 9 \n");
         }
 
         public static string printChar(int num)
@@ -117,6 +135,13 @@ namespace TicTacToe
                 default:
                     return "";
             }
+        }
+
+        public static void printInvalidPosition()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("Invalid position. Select an available position(1-9): ");
+            Console.ResetColor();
         }
     }
 }
