@@ -17,6 +17,16 @@ namespace GradeBook
                 input = Console.ReadLine();
                 switch (input)
                 {
+                    case "A":
+                    case "a":
+                        addStudent(ref students);
+                        break;
+
+                    case "D":
+                    case "d":
+                        deleteStudent(ref students);
+                        break;
+
                     case "P":
                     case "p":
                         printStudents(students);
@@ -24,13 +34,21 @@ namespace GradeBook
 
                     case "Q":
                     case "q":
-                        return;
-
-                    
+                        return;                   
                 }
             }
 
             
+        }
+
+        public static void addStudent(ref List<Student> students)
+        {
+            Console.WriteLine("addStudent");
+        }
+
+        public static void deleteStudent(ref List<Student> students)
+        {
+            Console.WriteLine("deleteStudent");
         }
 
         public static void printStudents(List<Student> students)
@@ -44,7 +62,10 @@ namespace GradeBook
 
         public static void printMenu()
         {
+            Console.WriteLine("A => Add Student");
+            Console.WriteLine("D => Delete Student");
             Console.WriteLine("P => Print Students");
+            Console.WriteLine("Q => Quit");
         }
     }
 
