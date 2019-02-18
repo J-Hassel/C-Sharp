@@ -8,11 +8,12 @@ namespace GradeBook
         static void Main(string[] args)
         {
             string input;
-            List<Student> students = new List<Student>();
+            Dictionary<int, Student> students = new Dictionary<int, Student>();     //key = studentID, value = Student object
 
 
             while(true)
             {
+                // menu selection processing
                 printMenu();
                 input = Console.ReadLine();
                 switch (input)
@@ -29,7 +30,7 @@ namespace GradeBook
 
                     case "P":
                     case "p":
-                        printStudents(students);
+                        printStudents(ref students);
                         break;
 
                     case "Q":
@@ -41,31 +42,64 @@ namespace GradeBook
             
         }
 
-        public static void addStudent(ref List<Student> students)
-        {
-            Console.WriteLine("addStudent");
+        public static void addStudent(ref Dictionary<int, Student> students)
+        {   // getting student information, then creating a new student and storing it in the data structure
+            string fName, lName, major;
+            int hw, proj, t1, t2, fin;
+
+            Console.Write("First Name: ");
+            fName = Console.ReadLine();
+
+            Console.Write("Last Name: ");
+            lName = Console.ReadLine();
+
+            Console.Write("Major: ");
+            major = Console.ReadLine();
+
+            Console.Write("Homework Grade: ");
+            hw = Int32.Parse(Console.ReadLine());
+
+            Console.Write("Project Grade: ");
+            proj = Int32.Parse(Console.ReadLine());
+
+            Console.Write("Test 1 Grade: ");
+            t1 = Int32.Parse(Console.ReadLine());
+
+            Console.Write("Test 2 Grade: ");
+            t2 = Int32.Parse(Console.ReadLine());
+
+            Console.Write("Final Grade: ");
+            fin = Int32.Parse(Console.ReadLine());
+
+            Student stud = new Student(fName, lName, major, hw, proj, t1, t2, fin);
+            students.Add(stud.getID(), stud);
         }
 
-        public static void deleteStudent(ref List<Student> students)
-        {
-            Console.WriteLine("deleteStudent");
+        public static void deleteStudent(ref Dictionary<int, Student> students)
+        {   //removing 
+            Console.Write("Enter the ID of the student to delete: ");
+            int id = Int32.Parse(Console.ReadLine());
+
+            students.Remove(id);
         }
 
-        public static void printStudents(List<Student> students)
+        public static void printStudents(ref Dictionary<int, Student> students)
         {
-            Console.WriteLine(string.Format("\n    {0, -10}{1, -14}{2, -20}{3}","ID", "Name", "Major", "Average"));
-            Console.WriteLine("--------------------------------------------------------");
+            Console.WriteLine(string.Format("\n\n    {0, -10}{1, -24}{2, -30}{3}","ID", "Name", "Major", "Average"));
+            Console.WriteLine("----------------------------------------------------------------------------");
             
-            foreach(var student in students)
-                student.print();
+            foreach(var key in students)
+                key.Value.print();
         }
 
         public static void printMenu()
         {
-            Console.WriteLine("A => Add Student");
+            Console.WriteLine("\n\nA => Add Student");
             Console.WriteLine("D => Delete Student");
             Console.WriteLine("P => Print Students");
             Console.WriteLine("Q => Quit");
+            Console.Write("  => ");
+
         }
     }
 
@@ -87,6 +121,7 @@ namespace GradeBook
             test1 = 0;
             test2 = 0;
             final = 0;
+            average = 0;
         }
 
         public Student(string fName, string lName, string maj)
@@ -100,6 +135,7 @@ namespace GradeBook
             test1 = 0;
             test2 = 0;
             final = 0;
+            average = 0;
         }
 
         public Student(string fName, string lName, string maj, int hw, int proj, int t1, int t2, int fin)
@@ -113,7 +149,10 @@ namespace GradeBook
             test1 = t1;
             test2 = t2;
             final = fin;
+            average = calculateAverage();
         }
+
+        public int getID() { return studentID; }
 
         public void setFirstName(string name) { firstName = name; }
 
@@ -158,7 +197,7 @@ namespace GradeBook
 
         public void print()
         {
-            Console.WriteLine(string.Format("    {0, -10}{1} {2, -10}{3, -20}{4}", studentID, firstName, lastName, major, average));
+            Console.WriteLine(string.Format("    {0, -10}{1} {2, -20}{3, -30}{4}", studentID, firstName, lastName, major, average));
         }
     }
 }
